@@ -58,20 +58,24 @@ def load_data(data_dir):
     be a list of integer labels, representing the categories for each of the
     corresponding `images`.
     """
+    
+    
     data_dir = os.path("/data/gtsrb")
     
     images = []
     labels = []
     
     for category in range(NUM_CATEGORIES):
-        category_dir = os.path.join(data_dir)
+        for dirs in os.walk(data_dir):
+            category_dir = os.path.join(data_dir,"category_directory")
         
    
         for filename in os.listdir(category_dir):
             image_path = os.path.join(category_dir, filename)
             
-            # Load and preprocess the image
+            # read image
             image = cv2.imread(image_path)
+            #resize iamge
             image = cv2.resize(image, (IMG_WIDTH, IMG_HEIGHT))
             images.append(image)
             labels.append(category)
@@ -85,7 +89,24 @@ def get_model():
     `input_shape` of the first layer is `(IMG_WIDTH, IMG_HEIGHT, 3)`.
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
-    raise NotImplementedError
+    model = tf.keras.models.Sequential([
+        tf.keras.layers.Conv2D(NUM_CATEGORIES, (3, 3), activation='relu', input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+        tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+        tf.keras.layers.Flatten(),
+        tf.keras.layers.Dense(128, activation="relu"), 
+        tf.keras.layers.Dropout(0.5),
+        
+        tf.keras.layers.Dense(NUM_CATEGORIES, activation='softmax')
+    ])
+    
+    model.compile(optimizer='adam',
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
+    
+    filename = "ocr_trafic_model.h5"
+    model.save(filename)
+    print(f"model saved to {filename}")
+    
 
 
 if __name__ == "__main__":
