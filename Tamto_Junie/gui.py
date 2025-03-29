@@ -18,7 +18,7 @@ DATA_DIR = "C:/Users/PAMSTORE/Desktop/intro to AI/Traffic/data/gtsrb"
 classes = {i: f"Class {i}" for i in range(43)}
 
 top = tk.Tk()
-top.geometry('800x600')
+top.geometry('800x700')
 top.title('Traffic Sign Classification')
 top.configure(background='#CDCDCD')
 label = Label(top, background='#CDCDCD', font=('arial', 15, 'bold'))
