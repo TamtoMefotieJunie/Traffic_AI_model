@@ -39,7 +39,7 @@ def main():
 
     # Save model to file
     if len(sys.argv) == 3:
-        filename = sys.argv[2]
+        filename = "traffic_model.h5"
         model.save(filename)
         print(f"Model saved to {filename}.")
 
@@ -60,14 +60,13 @@ def load_data(data_dir):
     """
     
     
-    data_dir = os.path("/data/gtsrb")
+    # data_dir = os.path("/data/gtsrb")
     
     images = []
     labels = []
     
     for category in range(NUM_CATEGORIES):
-        for dirs in os.walk(data_dir):
-            category_dir = os.path.join(data_dir,"category_directory")
+        category_dir = os.path.join(data_dir, str(category))
         
    
         for filename in os.listdir(category_dir):
@@ -90,12 +89,11 @@ def get_model():
     The output layer should have `NUM_CATEGORIES` units, one for each category.
     """
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Conv2D(NUM_CATEGORIES, (3, 3), activation='relu', input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)),
         tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation="relu"), 
+        tf.keras.layers.Dense(128, activation="relu"),  # Changed Aeras to keras
         tf.keras.layers.Dropout(0.5),
-        
         tf.keras.layers.Dense(NUM_CATEGORIES, activation='softmax')
     ])
     
@@ -103,9 +101,7 @@ def get_model():
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
     
-    filename = "ocr_trafic_model.h5"
-    model.save(filename)
-    print(f"model saved to {filename}")
+    return model
     
 
 
