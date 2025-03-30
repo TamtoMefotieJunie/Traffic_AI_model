@@ -39,7 +39,7 @@ def main():
 
     # Save model to file
     if len(sys.argv) == 3:
-        filename = "traffic_model.h5"
+        filename = "best_model.h5"
         model.save(filename)
         print(f"Model saved to {filename}.")
 
